@@ -1,0 +1,43 @@
+html,
+body {
+    margin: 0;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.5;
+    color: #1c1917;
+    background: #fafaf9;
+}
+
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+}
+
+form {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin: 1.5rem 0 2rem;
+}
+
+input[type="search"] {
+    flex: 1;
+    padding: 0.4rem 0.6rem;
+}
+
+ul {
+    padding-left: 1.25rem;
+}
+
+li {
+    margin: 0.75rem 0;
+}
+
+li span,
+li time {
+    display: block;
+    color: #44403c;
+}
