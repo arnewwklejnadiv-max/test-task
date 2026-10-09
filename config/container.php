@@ -9,6 +9,7 @@ use App\Http\ViewInterface;
 use App\Infrastructure\Config\Env;
 use App\Infrastructure\Container;
 use App\Infrastructure\Database\ConnectionInterface;
+use App\Infrastructure\Database\Migrator;
 use App\Infrastructure\Database\PdoConnection;
 use App\Infrastructure\View\FileRenderer;
 
@@ -19,6 +20,9 @@ return [
         Env::string('DB_NAME'),
         Env::string('DB_USER'),
         Env::string('DB_PASSWORD'),
+    ),
+    Migrator::class => static fn (Container $container): Migrator => new Migrator(
+        $container->get(ConnectionInterface::class),
     ),
     FileRenderer::class => static fn (): FileRenderer => new FileRenderer(BASE_PATH . '/resources/views'),
     ViewInterface::class => FileRenderer::class,
