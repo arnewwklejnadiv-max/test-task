@@ -31,6 +31,8 @@ final class SmartyRenderer implements ViewInterface
         foreach ($data as $key => $value) {
             $smarty->assign($key, $value);
         }
+        $css = dirname($this->templateDir, 2) . '/public/css/style.css';
+        $smarty->assign('cssVersion', is_file($css) ? (string) filemtime($css) : '1');
 
         return $smarty->fetch($view . '.tpl');
     }

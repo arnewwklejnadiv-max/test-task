@@ -30,6 +30,13 @@ services:
       timeout: 5s
       retries: 20
       start_period: 20s
+  sass:
+    image: node:22-alpine
+    working_dir: /app
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+    command: npx --yes sass --watch resources/scss/style.scss:public/css/style.css --poll --no-source-map --style=expanded
   nginx:
     image: nginx:alpine
     restart: unless-stopped
