@@ -14,4 +14,14 @@ interface CategoryRepository
 
     /** @return list<Category> */
     public function all(): array;
+
+    /** @return list<Category> */
+    public function withArticles(int $limit, int $offset): array;
+
+    /**
+     * @param list<int> $ids
+     *
+     * @return list<Category>
+     */
+    public function findByIds(array $ids): array;
 }

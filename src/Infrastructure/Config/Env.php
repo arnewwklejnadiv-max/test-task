@@ -18,29 +18,8 @@ final class Env
         }
 
         foreach ($lines as $line) {
-            $line = trim($line);
-            if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
-                continue;
-            }
-
             [$key, $value] = explode('=', $line, 2);
-            $key = trim($key);
-            $value = trim($value);
-            if ($key === '' || self::has($key)) {
-                continue;
-            }
-
-            $length = strlen($value);
-            if ($length >= 2) {
-                $quote = $value[0];
-                if (($quote === '"' || $quote === '\'') && $value[$length - 1] === $quote) {
-                    $value = substr($value, 1, -1);
-                }
-            }
-
-            putenv($key . '=' . $value);
             $_ENV[$key] = $value;
-            $_SERVER[$key] = $value;
         }
     }
 
@@ -54,21 +33,17 @@ final class Env
 
     public static function string(string $key): string
     {
-        $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
-        if (!is_string($value) || $value === '') {
+        $value = $_ENV[$key] ?? '';
+        if ($value === '') {
             throw new \RuntimeException($key . ' не задан');
         }
 
         return $value;
     }
 
-    public static function bool(string $key, bool $default = false): bool
+    public static function bool(string $key): bool
     {
-        if (!self::has($key)) {
-            return $default;
-        }
-
-        return in_array(strtolower(self::string($key)), ['1', 'true', 'yes', 'on'], true);
+        return self::string($key) === 'true';
     }
 
     public static function int(string $key): int
@@ -79,12 +54,5 @@ final class Env
         }
 
         return (int) $value;
-    }
-
-    private static function has(string $key): bool
-    {
-        $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
-
-        return is_string($value) && $value !== '';
     }
 }

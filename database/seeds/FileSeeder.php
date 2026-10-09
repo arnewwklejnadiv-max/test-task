@@ -9,7 +9,7 @@ use App\Domain\Service\FileService;
 
 final class FileSeeder
 {
-    public const COUNT = 24;
+    public const COUNT = 48;
 
     public function __construct(private FileService $files) {}
 

@@ -25,17 +25,22 @@ final class PdoFileRepository implements FileRepository
         return new File($this->connection->lastInsertId(), $file->path, $file->name);
     }
 
-    public function find(int $id): ?File
+    public function findByIds(array $ids): array
     {
-        $row = $this->connection->fetch(
-            'SELECT id, path, name FROM files WHERE id = :id',
-            ['id' => $id],
-        );
-        if ($row === null) {
-            return null;
+        $ids = array_values(array_unique(array_filter($ids, static fn (int $id): bool => $id > 0)));
+        if ($ids === []) {
+            return [];
         }
 
-        return $this->map($row);
+        $files = [];
+        foreach ($this->connection->fetchAll(
+            'SELECT id, path, name FROM files WHERE id IN (' . implode(', ', array_fill(0, count($ids), '?')) . ')',
+            $ids,
+        ) as $row) {
+            $files[(int) $row['id']] = $this->map($row);
+        }
+
+        return $files;
     }
 
     public function all(): array

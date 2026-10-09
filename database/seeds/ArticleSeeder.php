@@ -13,7 +13,7 @@ use DateTimeImmutable;
 
 final class ArticleSeeder
 {
-    public const COUNT = 24;
+    public const COUNT = 48;
 
     public function __construct(
         private ArticleService $articles,

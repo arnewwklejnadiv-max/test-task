@@ -6,18 +6,18 @@ namespace App\Infrastructure\Database;
 
 interface ConnectionInterface
 {
-    /** @param array<string, mixed> $params */
+    /** @param array<int|string, mixed> $params */
     public function execute(string $sql, array $params = []): int;
 
     /**
-     * @param array<string, mixed> $params
+     * @param array<int|string, mixed> $params
      *
      * @return array<string, mixed>|null
      */
     public function fetch(string $sql, array $params = []): ?array;
 
     /**
-     * @param array<string, mixed> $params
+     * @param array<int|string, mixed> $params
      *
      * @return list<array<string, mixed>>
      */

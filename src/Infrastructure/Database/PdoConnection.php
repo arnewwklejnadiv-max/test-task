@@ -115,7 +115,7 @@ final class PdoConnection implements ConnectionInterface
         $this->pdo()->exec('ROLLBACK TO SAVEPOINT transaction_' . $this->transactionLevel);
     }
 
-    /** @param array<string, mixed> $params */
+    /** @param array<int|string, mixed> $params */
     private function statement(string $sql, array $params): PDOStatement
     {
         $statement = $this->pdo()->prepare($sql);

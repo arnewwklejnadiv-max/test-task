@@ -9,7 +9,7 @@ use App\Domain\Service\CategoryService;
 
 final class CategorySeeder
 {
-    public const COUNT = 10;
+    public const COUNT = 20;
 
     public function __construct(private CategoryService $categories) {}
 

@@ -33,12 +33,13 @@ final class Router
     {
         $allowed = [];
         foreach ($this->routes as [$method, $path, $handler]) {
-            if ($path !== $request->path()) {
+            $params = $this->match($path, $request->path());
+            if ($params === null) {
                 continue;
             }
             $allowed[] = $method;
             if ($method === $request->method()) {
-                return $this->invoke($handler, $request);
+                return $this->invoke($handler, $request->withParams($params));
             }
         }
 
@@ -64,5 +65,23 @@ final class Router
         }
 
         return $response;
+    }
+
+    /** @return array<string, string>|null */
+    private function match(string $route, string $path): ?array
+    {
+        $pattern = preg_replace('#\{([A-Za-z_][A-Za-z0-9_]*)\}#', '(?P<$1>[1-9]\\d*)', $route);
+        if (!is_string($pattern) || !preg_match('#^' . $pattern . '$#', $path, $matches)) {
+            return null;
+        }
+
+        $params = [];
+        foreach ($matches as $key => $value) {
+            if (is_string($key)) {
+                $params[$key] = $value;
+            }
+        }
+
+        return $params;
     }
 }

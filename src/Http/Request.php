@@ -7,10 +7,12 @@ namespace App\Http;
 final class Request
 {
     /** @param array<string, mixed> $query */
+    /** @param array<string, string> $params */
     public function __construct(
         private string $method,
         private string $path,
         private array $query,
+        private array $params = [],
     ) {}
 
     public static function fromGlobals(): self
@@ -45,5 +47,19 @@ final class Request
     public function query(string $key): mixed
     {
         return $this->query[$key] ?? null;
+    }
+
+    /** @param array<string, string> $params */
+    public function withParams(array $params): self
+    {
+        $copy = clone $this;
+        $copy->params = $params;
+
+        return $copy;
+    }
+
+    public function param(string $key): string
+    {
+        return $this->params[$key] ?? '';
     }
 }

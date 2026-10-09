@@ -10,7 +10,12 @@ interface FileRepository
 {
     public function add(File $file): File;
 
-    public function find(int $id): ?File;
+    /**
+     * @param list<int> $ids
+     *
+     * @return array<int, File>
+     */
+    public function findByIds(array $ids): array;
 
     /** @return list<File> */
     public function all(): array;

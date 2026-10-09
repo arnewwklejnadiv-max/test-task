@@ -16,11 +16,6 @@ final class FileService
         return $this->files->add($file);
     }
 
-    public function find(int $id): ?File
-    {
-        return $this->files->find($id);
-    }
-
     /** @return list<File> */
     public function all(): array
     {
