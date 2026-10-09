@@ -8,6 +8,7 @@ use App\Domain\Entity\Article;
 use App\Domain\Entity\Category;
 use App\Domain\Service\ArticleService;
 use App\Domain\Service\CategoryService;
+use App\Domain\Service\FileService;
 use DateTimeImmutable;
 
 final class ArticleSeeder
@@ -17,6 +18,7 @@ final class ArticleSeeder
     public function __construct(
         private ArticleService $articles,
         private CategoryService $categories,
+        private FileService $files,
     ) {}
 
     public function run(): void
@@ -27,10 +29,11 @@ final class ArticleSeeder
             return;
         }
 
+        $fileIds = $this->fileIds();
         for ($number = 1; $number <= self::COUNT; ++$number) {
             $this->articles->create(new Article(
                 null,
-                sprintf('article-%d.jpg', $number),
+                $fileIds[sprintf('article-%d.jpg', $number)] ?? null,
                 sprintf('Статья %d', $number),
                 sprintf('Описание статьи %d', $number),
                 sprintf('Текст статьи %d', $number),
@@ -39,6 +42,21 @@ final class ArticleSeeder
                 $this->categoryIds($categories, $number, $categoryCount),
             ));
         }
+    }
+
+    /** @return array<string, int> */
+    private function fileIds(): array
+    {
+        $fileIds = [];
+        foreach ($this->files->all() as $file) {
+            if ($file->id === null) {
+                continue;
+            }
+
+            $fileIds[$file->name] = $file->id;
+        }
+
+        return $fileIds;
     }
 
     /**

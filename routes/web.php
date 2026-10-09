@@ -6,4 +6,5 @@ use App\Http\Controller\HomeController;
 
 return [
     ['GET', '/', [HomeController::class, 'index']],
+    ['GET', '/home', [HomeController::class, 'index']],
 ];

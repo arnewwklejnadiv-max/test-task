@@ -11,6 +11,7 @@ final class DatabaseSeeder
 {
     public function __construct(
         private CategorySeeder $categories,
+        private FileSeeder $files,
         private ArticleSeeder $articles,
         private CategoryService $existing,
     ) {}
@@ -22,6 +23,7 @@ final class DatabaseSeeder
         }
 
         $this->categories->run();
+        $this->files->run();
         $this->articles->run();
     }
 }

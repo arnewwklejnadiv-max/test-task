@@ -7,6 +7,7 @@ use App\Console\Commands\MigrateCommand;
 use App\Console\Commands\SeedCommand;
 use App\Domain\Repository\ArticleRepository;
 use App\Domain\Repository\CategoryRepository;
+use App\Domain\Repository\FileRepository;
 use App\Http\Kernel;
 use App\Http\Router;
 use App\Http\ViewInterface;
@@ -17,6 +18,7 @@ use App\Infrastructure\Database\Migrator;
 use App\Infrastructure\Database\PdoConnection;
 use App\Infrastructure\Persistence\PdoArticleRepository;
 use App\Infrastructure\Persistence\PdoCategoryRepository;
+use App\Infrastructure\Persistence\PdoFileRepository;
 use App\Infrastructure\View\SmartyRenderer;
 
 return [
@@ -32,6 +34,7 @@ return [
     ),
     ArticleRepository::class => PdoArticleRepository::class,
     CategoryRepository::class => PdoCategoryRepository::class,
+    FileRepository::class => PdoFileRepository::class,
     SmartyRenderer::class => static fn (): SmartyRenderer => new SmartyRenderer(
         BASE_PATH . '/resources/views',
         sys_get_temp_dir() . '/smarty',

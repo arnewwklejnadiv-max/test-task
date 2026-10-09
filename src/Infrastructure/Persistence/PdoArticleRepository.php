@@ -17,9 +17,9 @@ final class PdoArticleRepository implements ArticleRepository
     {
         $created = $this->connection->transaction(function () use ($article): Article {
             $this->connection->execute(
-                'INSERT INTO articles (image, name, description, `text`, published_at) VALUES (:image, :name, :description, :text, :published_at)',
+                'INSERT INTO articles (file_id, name, description, `text`, published_at) VALUES (:file_id, :name, :description, :text, :published_at)',
                 [
-                    'image' => $article->image,
+                    'file_id' => $article->fileId,
                     'name' => $article->name,
                     'description' => $article->description,
                     'text' => $article->text,
@@ -39,7 +39,7 @@ final class PdoArticleRepository implements ArticleRepository
 
             return new Article(
                 $id,
-                $article->image,
+                $article->fileId,
                 $article->name,
                 $article->description,
                 $article->text,
@@ -58,7 +58,7 @@ final class PdoArticleRepository implements ArticleRepository
     public function find(int $id): ?Article
     {
         $row = $this->connection->fetch(
-            'SELECT id, image, name, description, `text`, published_at, views FROM articles WHERE id = :id',
+            'SELECT id, file_id, name, description, `text`, published_at, views FROM articles WHERE id = :id',
             ['id' => $id],
         );
         if ($row === null) {
@@ -71,7 +71,7 @@ final class PdoArticleRepository implements ArticleRepository
     public function all(): array
     {
         $rows = $this->connection->fetchAll(
-            'SELECT id, image, name, description, `text`, published_at, views FROM articles ORDER BY id',
+            'SELECT id, file_id, name, description, `text`, published_at, views FROM articles ORDER BY id',
         );
         if ($rows === []) {
             return [];
@@ -125,6 +125,15 @@ final class PdoArticleRepository implements ArticleRepository
         return array_map(static fn (array $row): int => (int) $row['category_id'], $rows);
     }
 
+    private function fileId(mixed $value): ?int
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        return (int) $value;
+    }
+
     /**
      * @param array<string, mixed> $row
      * @param list<int> $categoryIds
@@ -135,7 +144,7 @@ final class PdoArticleRepository implements ArticleRepository
 
         return new Article(
             (int) $row['id'],
-            (string) $row['image'],
+            $this->fileId($row['file_id'] ?? null),
             (string) $row['name'],
             (string) $row['description'],
             (string) $row['text'],

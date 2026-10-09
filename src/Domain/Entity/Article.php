@@ -11,7 +11,7 @@ final readonly class Article
     /** @param list<int> $categoryIds */
     public function __construct(
         public ?int $id,
-        public string $image,
+        public ?int $fileId,
         public string $name,
         public string $description,
         public string $text,
