@@ -6,6 +6,6 @@ namespace App\Http;
 
 interface ViewInterface
 {
-    /** @param array<string, scalar|null> $data */
+    /** @param array<string, mixed> $data */
     public function render(string $view, array $data = []): string;
 }

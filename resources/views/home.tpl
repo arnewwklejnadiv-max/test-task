@@ -6,6 +6,6 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<main>hellow</main>
+<main>hellow2</main>
 </body>
 </html>

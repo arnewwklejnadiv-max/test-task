@@ -62,6 +62,15 @@ final class Env
         return $value;
     }
 
+    public static function bool(string $key, bool $default = false): bool
+    {
+        if (!self::has($key)) {
+            return $default;
+        }
+
+        return in_array(strtolower(self::string($key)), ['1', 'true', 'yes', 'on'], true);
+    }
+
     public static function int(string $key): int
     {
         $value = self::string($key);

@@ -24,6 +24,8 @@ COPY . .
 # vendor копируется последним: даже если .dockerignore забыли, победит версия из сборки
 COPY --from=vendor /app/vendor ./vendor
 
+RUN mkdir -p /tmp/smarty && chown www-data:www-data /tmp/smarty
+
 USER www-data
 
 EXPOSE 9000

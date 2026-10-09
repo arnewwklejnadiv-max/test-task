@@ -17,7 +17,7 @@ use App\Infrastructure\Database\Migrator;
 use App\Infrastructure\Database\PdoConnection;
 use App\Infrastructure\Persistence\PdoArticleRepository;
 use App\Infrastructure\Persistence\PdoCategoryRepository;
-use App\Infrastructure\View\FileRenderer;
+use App\Infrastructure\View\SmartyRenderer;
 
 return [
     ConnectionInterface::class => static fn (): ConnectionInterface => new PdoConnection(
@@ -32,8 +32,12 @@ return [
     ),
     ArticleRepository::class => PdoArticleRepository::class,
     CategoryRepository::class => PdoCategoryRepository::class,
-    FileRenderer::class => static fn (): FileRenderer => new FileRenderer(BASE_PATH . '/resources/views'),
-    ViewInterface::class => FileRenderer::class,
+    SmartyRenderer::class => static fn (): SmartyRenderer => new SmartyRenderer(
+        BASE_PATH . '/resources/views',
+        sys_get_temp_dir() . '/smarty',
+        !Env::bool('APP_DEBUG'),
+    ),
+    ViewInterface::class => SmartyRenderer::class,
     Kernel::class => static fn (Container $container): Kernel => new Kernel(
         $container->get(Router::class),
     ),
