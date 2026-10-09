@@ -22,6 +22,13 @@ final class Bootstrap
         }
 
         Env::load(BASE_PATH . '/.env');
+        Env::require([
+            'DB_HOST',
+            'DB_PORT',
+            'DB_NAME',
+            'DB_USER',
+            'DB_PASSWORD',
+        ]);
 
         /** @var array<string, callable(Container): object|class-string> $definitions */
         $definitions = require BASE_PATH . '/config/container.php';
