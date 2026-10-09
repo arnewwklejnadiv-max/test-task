@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Категории</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Главная</title>
+    <link rel="stylesheet" href="/css/style.css?v=5">
 </head>
 <body>
 {include file="_header.tpl"}
 <main>
-    <h1>Категории</h1>
+    <h1>Главная</h1>
     {if $categories}
         <div id="feed">
             {include file="_categories.tpl"}

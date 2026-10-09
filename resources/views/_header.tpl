@@ -1,3 +1,5 @@
 <header class="site">
-    <a class="logo" href="/">Категории</a>
+    <nav class="logo">
+        <a href="/"{if isset($nav) && $nav == 'home'} class="is-current" aria-current="page"{/if}>Главная</a>
+    </nav>
 </header>

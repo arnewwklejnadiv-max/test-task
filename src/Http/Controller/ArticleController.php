@@ -26,4 +26,14 @@ final readonly class ArticleController
 
         return Response::html($this->views->render('article', $details));
     }
+
+    public function view(Request $request): Response
+    {
+        $views = $this->articles->registerView((int) $request->param('id'));
+        if ($views === null) {
+            throw new NotFoundException();
+        }
+
+        return Response::text((string) $views);
+    }
 }

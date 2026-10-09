@@ -18,6 +18,11 @@ final class Response
         return new self($status, $body);
     }
 
+    public static function text(string $body, int $status = 200): self
+    {
+        return new self($status, $body, ['Content-Type' => 'text/plain; charset=utf-8']);
+    }
+
     public function status(): int
     {
         return $this->status;

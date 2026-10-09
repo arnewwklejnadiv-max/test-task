@@ -4,19 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$article->name}</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=5">
 </head>
 <body>
 {include file="_header.tpl"}
 <main class="article-page">
-    <p class="crumb"><a href="/">Категории</a></p>
     <article>
         <div class="hero">{include file="_image.tpl"}</div>
         <h1>{$article->name}</h1>
         <p class="lead">{$article->description}</p>
         <p class="meta">
             {if $article->publishedAt}<time>{$article->publishedAt->format('d.m.Y')}</time>{/if}
-            <span>{$article->views} просмотров</span>
+            <span id="views" data-id="{$article->id}">{$article->views} просмотров</span>
         </p>
         {if $categories}
             <p class="tags">
@@ -47,5 +46,6 @@
         </section>
     {/if}
 </main>
+<script src="/js/article.js"></script>
 </body>
 </html>

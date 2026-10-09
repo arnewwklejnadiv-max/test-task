@@ -30,4 +30,6 @@ interface ArticleRepository
 
     /** @return list<Article> */
     public function related(int $id, int $limit): array;
+
+    public function incrementViews(int $id): int;
 }

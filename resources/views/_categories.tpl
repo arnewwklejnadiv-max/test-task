@@ -1,7 +1,7 @@
 {foreach $categories as $category}
     <section class="category">
         <div class="category-head">
-            <h2>{$category->name}</h2>
+            <h2><a href="/categories/{$category->id}">{$category->name}</a></h2>
             <a class="button" href="/categories/{$category->id}">Все статьи</a>
         </div>
         {if isset($latest[$category->id])}

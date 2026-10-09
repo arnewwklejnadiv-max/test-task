@@ -34,6 +34,7 @@ final readonly class HomeController
             'latest' => $latest['groups'],
             'files' => $latest['files'],
             'nextOffset' => $feed['nextOffset'],
+            'nav' => 'home',
         ];
         $template = $request->query('partial') === '1' ? 'home_more' : 'home';
 

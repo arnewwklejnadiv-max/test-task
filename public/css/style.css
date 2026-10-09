@@ -12,6 +12,7 @@ body {
 
 a {
     color: inherit;
+    text-decoration: none;
 }
 
 .site {
@@ -20,15 +21,25 @@ a {
 }
 
 .logo {
-    display: block;
+    display: flex;
+    gap: 1.5rem;
     max-width: 72rem;
     margin: 0 auto;
     padding: 1rem 1.5rem;
-    color: #fafaf9;
     font-weight: 700;
     letter-spacing: 0.04em;
-    text-decoration: none;
     text-transform: uppercase;
+}
+
+.logo a {
+    color: #a8a29e;
+    text-decoration: none;
+}
+
+.logo a.is-current {
+    color: #fafaf9;
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
 }
 
 main {
@@ -110,10 +121,12 @@ h1 {
 
 .cover {
     display: block;
+    box-sizing: border-box;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    background: #e7e2d8;
+    height: auto;
+    padding: 0.75rem;
+    background: #fff;
+    object-fit: contain;
 }
 
 .button {
@@ -123,15 +136,6 @@ h1 {
     background: #1c1917;
     color: #fafaf9;
     font-size: 0.9rem;
-    text-decoration: none;
-}
-
-.crumb {
-    margin: 0 0 1rem;
-}
-
-.crumb a {
-    color: #57534e;
     text-decoration: none;
 }
 
@@ -191,10 +195,6 @@ h1 {
     margin: 0 0 1.25rem;
     overflow: hidden;
     border-radius: 16px;
-}
-
-.hero .cover {
-    aspect-ratio: 2 / 1;
 }
 
 .tags {

@@ -11,4 +11,5 @@ return [
     ['GET', '/home', [HomeController::class, 'index']],
     ['GET', '/categories/{id}', [CategoryController::class, 'show']],
     ['GET', '/articles/{id}', [ArticleController::class, 'show']],
+    ['POST', '/articles/{id}/views', [ArticleController::class, 'view']],
 ];

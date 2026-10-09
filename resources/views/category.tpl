@@ -4,12 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$category->name}</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=5">
 </head>
 <body>
 {include file="_header.tpl"}
 <main>
-    <p class="crumb"><a href="/">Категории</a></p>
     <header class="page-head">
         <h1>{$category->name}</h1>
         <p>{$category->description}</p>

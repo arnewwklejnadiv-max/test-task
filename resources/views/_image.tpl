@@ -3,7 +3,11 @@
     {assign var="imageFile" value=$files[$article->fileId]}
 {/if}
 {if $imageFile}
-    <img class="cover" src="/{$imageFile->path}/{$imageFile->name}" alt="{$article->name}">
+    {assign var="imageSrc" value="{$imageFile->path}/{$imageFile->name}"}
+    {if $imageFile->path|substr:0:4 != 'http'}
+        {assign var="imageSrc" value="/{$imageSrc}"}
+    {/if}
+    <img class="cover" src="{$imageSrc}" alt="{$article->name}">
 {else}
     <img class="cover" src="/images/placeholder.svg" alt="{$article->name}">
 {/if}

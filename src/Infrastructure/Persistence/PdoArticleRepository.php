@@ -146,6 +146,14 @@ final class PdoArticleRepository implements ArticleRepository
         ));
     }
 
+    public function incrementViews(int $id): int
+    {
+        return $this->connection->execute(
+            'UPDATE articles SET views = views + 1 WHERE id = :id',
+            ['id' => $id],
+        );
+    }
+
     /**
      * @param list<array<string, mixed>> $rows
      *
