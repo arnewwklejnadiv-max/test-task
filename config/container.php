@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Console\Application;
+use App\Console\Commands\MigrateCommand;
 use App\Http\Kernel;
 use App\Http\Router;
 use App\Http\ViewInterface;
@@ -33,5 +34,7 @@ return [
         require BASE_PATH . '/routes/web.php',
         static fn (string $class): object => $container->get($class),
     ),
-    Application::class => static fn (): Application => new Application([]),
+    Application::class => static fn (Container $container): Application => new Application([
+        $container->get(MigrateCommand::class),
+    ]),
 ];
