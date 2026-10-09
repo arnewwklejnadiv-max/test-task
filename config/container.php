@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use App\Console\Application;
 use App\Console\Commands\MigrateCommand;
+use App\Console\Commands\SeedCommand;
+use App\Domain\Repository\ArticleRepository;
+use App\Domain\Repository\CategoryRepository;
 use App\Http\Kernel;
 use App\Http\Router;
 use App\Http\ViewInterface;
@@ -12,6 +15,8 @@ use App\Infrastructure\Container;
 use App\Infrastructure\Database\ConnectionInterface;
 use App\Infrastructure\Database\Migrator;
 use App\Infrastructure\Database\PdoConnection;
+use App\Infrastructure\Persistence\PdoArticleRepository;
+use App\Infrastructure\Persistence\PdoCategoryRepository;
 use App\Infrastructure\View\FileRenderer;
 
 return [
@@ -25,6 +30,8 @@ return [
     Migrator::class => static fn (Container $container): Migrator => new Migrator(
         $container->get(ConnectionInterface::class),
     ),
+    ArticleRepository::class => PdoArticleRepository::class,
+    CategoryRepository::class => PdoCategoryRepository::class,
     FileRenderer::class => static fn (): FileRenderer => new FileRenderer(BASE_PATH . '/resources/views'),
     ViewInterface::class => FileRenderer::class,
     Kernel::class => static fn (Container $container): Kernel => new Kernel(
@@ -36,5 +43,6 @@ return [
     ),
     Application::class => static fn (Container $container): Application => new Application([
         $container->get(MigrateCommand::class),
+        $container->get(SeedCommand::class),
     ]),
 ];
