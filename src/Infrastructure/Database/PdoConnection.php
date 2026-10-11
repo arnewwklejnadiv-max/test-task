@@ -40,11 +40,17 @@ final class PdoConnection implements ConnectionInterface
         );
     }
 
+    /** @param array<int|string, mixed> $params */
     public function execute(string $sql, array $params = []): int
     {
         return $this->statement($sql, $params)->rowCount();
     }
 
+    /**
+     * @param array<int|string, mixed> $params
+     *
+     * @return array<string, mixed>|null
+     */
     public function fetch(string $sql, array $params = []): ?array
     {
         $row = $this->statement($sql, $params)->fetch();
@@ -52,6 +58,11 @@ final class PdoConnection implements ConnectionInterface
         return is_array($row) ? $row : null;
     }
 
+    /**
+     * @param array<int|string, mixed> $params
+     *
+     * @return list<array<string, mixed>>
+     */
     public function fetchAll(string $sql, array $params = []): array
     {
         return $this->statement($sql, $params)->fetchAll();

@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{$category->name}</title>
-    <link rel="stylesheet" href="/css/style.css?v={$cssVersion}">
-</head>
-<body>
-{include file="_header.tpl"}
+{extends file="layout.tpl"}
+{block name="title"}{$category->name}{/block}
+{block name="content"}
 <main>
     <header class="page-head">
         <h1>{$category->name}</h1>
@@ -38,5 +31,4 @@
         <p class="empty">Статей пока нет.</p>
     {/if}
 </main>
-</body>
-</html>
+{/block}

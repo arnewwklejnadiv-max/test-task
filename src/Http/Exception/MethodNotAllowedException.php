@@ -6,14 +6,8 @@ namespace App\Http\Exception;
 
 final class MethodNotAllowedException extends HttpException
 {
-    /** @param list<string> $allowed */
-    public function __construct(array $allowed)
+    public function __construct()
     {
-        $message = 'Метод не поддерживается';
-        if ($allowed !== []) {
-            $message .= '. Допустимые методы: ' . implode(', ', $allowed);
-        }
-
-        parent::__construct(405, $message);
+        parent::__construct(405, 'Метод не поддерживается');
     }
 }

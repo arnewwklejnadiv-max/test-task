@@ -44,7 +44,7 @@ final class Router
         }
 
         if ($allowed !== []) {
-            throw new MethodNotAllowedException($allowed);
+            throw new MethodNotAllowedException();
         }
 
         throw new NotFoundException();

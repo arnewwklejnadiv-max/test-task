@@ -9,6 +9,9 @@ use App\Domain\Repository\ArticleRepository;
 use App\Domain\Repository\CategoryRepository;
 use App\Domain\Repository\FileRepository;
 use App\Http\Kernel;
+use App\Http\Handler\MethodNotAllowedExceptionHandler;
+use App\Http\Handler\NotFoundExceptionHandler;
+use App\Http\Handler\UnhandledExceptionHandler;
 use App\Http\Router;
 use App\Http\ViewInterface;
 use App\Infrastructure\Config\Env;
@@ -43,6 +46,9 @@ return [
     ViewInterface::class => SmartyRenderer::class,
     Kernel::class => static fn (Container $container): Kernel => new Kernel(
         $container->get(Router::class),
+        $container->get(NotFoundExceptionHandler::class),
+        $container->get(MethodNotAllowedExceptionHandler::class),
+        $container->get(UnhandledExceptionHandler::class),
     ),
     Router::class => static fn (Container $container): Router => new Router(
         require BASE_PATH . '/routes/web.php',

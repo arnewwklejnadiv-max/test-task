@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{$article->name}</title>
-    <link rel="stylesheet" href="/css/style.css?v={$cssVersion}">
-</head>
-<body>
-{include file="_header.tpl"}
+{extends file="layout.tpl"}
+{block name="title"}{$article->name}{/block}
+{block name="content"}
 <main class="article-page">
     <article>
         <div class="hero">{include file="_image.tpl"}</div>
@@ -46,6 +39,7 @@
         </section>
     {/if}
 </main>
+{/block}
+{block name="scripts"}
 <script src="/js/article.js"></script>
-</body>
-</html>
+{/block}

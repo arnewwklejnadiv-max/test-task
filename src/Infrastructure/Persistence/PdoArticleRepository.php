@@ -69,13 +69,21 @@ final class PdoArticleRepository implements ArticleRepository
         return $this->hydrate([$row])[0];
     }
 
+    /** @return list<Article> */
     public function all(): array
     {
-        return $this->hydrate($this->connection->fetchAll(
+        $rows = $this->connection->fetchAll(
             'SELECT id, file_id, name, description, `text`, published_at, views FROM articles ORDER BY id',
-        ));
+        );
+
+        return $this->hydrate($rows);
     }
 
+    /**
+     * @param list<int> $categoryIds
+     *
+     * @return array<int, list<Article>>
+     */
     public function latestPerCategory(int $limit, array $categoryIds): array
     {
         $categoryIds = array_values(array_unique(array_filter(
@@ -86,21 +94,28 @@ final class PdoArticleRepository implements ArticleRepository
             return [];
         }
 
-        $grouped = [];
-        foreach ($categoryIds as $categoryId) {
-            $rows = $this->connection->fetchAll(
-                'SELECT a.id, a.file_id, a.name, a.description, a.`text`, a.published_at, a.views
+        $source = implode(' UNION ALL ', array_fill(0, count($categoryIds), 'SELECT ? AS category_id'));
+        $rows = $this->connection->fetchAll(
+            'SELECT src.category_id, a.id, a.file_id, a.name, a.description, a.`text`, a.published_at, a.views
+             FROM (' . $source . ') src
+             JOIN LATERAL (
+                 SELECT a.id, a.file_id, a.name, a.description, a.`text`, a.published_at, a.views
                  FROM articles a
                  INNER JOIN article_category ac ON ac.article_id = a.id
-                 WHERE ac.category_id = :id
+                 WHERE ac.category_id = src.category_id
                  ORDER BY a.published_at DESC, a.id DESC
-                 LIMIT ' . $limit,
-                ['id' => $categoryId],
-            );
-            if ($rows === []) {
-                continue;
-            }
-            $grouped[$categoryId] = $this->hydrate($rows);
+                 LIMIT ' . $limit . '
+             ) a ON TRUE',
+            $categoryIds,
+        );
+        if ($rows === []) {
+            return [];
+        }
+
+        $articles = $this->hydrate($rows);
+        $grouped = [];
+        foreach ($rows as $index => $row) {
+            $grouped[(int) $row['category_id']][] = $articles[$index];
         }
 
         return $grouped;
@@ -116,9 +131,10 @@ final class PdoArticleRepository implements ArticleRepository
         return (int) ($row['total'] ?? 0);
     }
 
+    /** @return list<Article> */
     public function listByCategory(int $categoryId, ArticleSort $sort, int $limit, int $offset): array
     {
-        return $this->hydrate($this->connection->fetchAll(
+        $rows = $this->connection->fetchAll(
             'SELECT a.id, a.file_id, a.name, a.description, a.`text`, a.published_at, a.views
              FROM articles a
              INNER JOIN article_category ac ON ac.article_id = a.id
@@ -126,12 +142,15 @@ final class PdoArticleRepository implements ArticleRepository
              ORDER BY ' . $this->orderBy($sort) . '
              LIMIT ' . $limit . ' OFFSET ' . $offset,
             ['id' => $categoryId],
-        ));
+        );
+
+        return $this->hydrate($rows);
     }
 
+    /** @return list<Article> */
     public function related(int $id, int $limit): array
     {
-        return $this->hydrate($this->connection->fetchAll(
+        $rows = $this->connection->fetchAll(
             'SELECT a.id, a.file_id, a.name, a.description, a.`text`, a.published_at, a.views
              FROM articles a
              INNER JOIN article_category ac ON ac.article_id = a.id
@@ -143,7 +162,9 @@ final class PdoArticleRepository implements ArticleRepository
              ORDER BY COUNT(*) DESC, a.published_at DESC, a.id DESC
              LIMIT ' . $limit,
             ['id' => $id, 'current' => $id],
-        ));
+        );
+
+        return $this->hydrate($rows);
     }
 
     public function incrementViews(int $id): int
@@ -191,15 +212,6 @@ final class PdoArticleRepository implements ArticleRepository
         };
     }
 
-    private function fileId(mixed $value): ?int
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        return (int) $value;
-    }
-
     /**
      * @param array<string, mixed> $row
      * @param list<int> $categoryIds
@@ -210,11 +222,11 @@ final class PdoArticleRepository implements ArticleRepository
 
         return new Article(
             (int) $row['id'],
-            $this->fileId($row['file_id'] ?? null),
+            $row['file_id'] === null ? null : (int) $row['file_id'],
             (string) $row['name'],
             (string) $row['description'],
             (string) $row['text'],
-            is_string($publishedAt) && $publishedAt !== '' ? new DateTimeImmutable($publishedAt) : null,
+            $publishedAt === null || $publishedAt === '' ? null : new DateTimeImmutable((string) $publishedAt),
             (int) $row['views'],
             $categoryIds,
         );

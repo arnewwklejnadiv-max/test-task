@@ -38,6 +38,7 @@ final class PdoCategoryRepository implements CategoryRepository
         return $this->map($row);
     }
 
+    /** @return list<Category> */
     public function all(): array
     {
         return array_map(
@@ -46,6 +47,11 @@ final class PdoCategoryRepository implements CategoryRepository
         );
     }
 
+    /**
+     * @param list<int> $ids
+     *
+     * @return list<Category>
+     */
     public function findByIds(array $ids): array
     {
         $ids = array_values(array_unique(array_filter($ids, static fn (int $id): bool => $id > 0)));
@@ -62,6 +68,7 @@ final class PdoCategoryRepository implements CategoryRepository
         );
     }
 
+    /** @return list<Category> */
     public function withArticles(int $limit, int $offset): array
     {
         return array_map(

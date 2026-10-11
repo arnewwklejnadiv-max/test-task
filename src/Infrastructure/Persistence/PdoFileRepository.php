@@ -25,6 +25,11 @@ final class PdoFileRepository implements FileRepository
         return new File($this->connection->lastInsertId(), $file->path, $file->name);
     }
 
+    /**
+     * @param list<int> $ids
+     *
+     * @return array<int, File>
+     */
     public function findByIds(array $ids): array
     {
         $ids = array_values(array_unique(array_filter($ids, static fn (int $id): bool => $id > 0)));
@@ -43,6 +48,7 @@ final class PdoFileRepository implements FileRepository
         return $files;
     }
 
+    /** @return list<File> */
     public function all(): array
     {
         return array_map(
