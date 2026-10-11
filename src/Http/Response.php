@@ -33,6 +33,16 @@ final class Response
         return $this->body;
     }
 
+    public function withCookie(string $name, string $value, int $maxAge): self
+    {
+        $copy = clone $this;
+        $copy->headers['Set-Cookie'] = $name . '=' . $value
+            . '; Max-Age=' . $maxAge
+            . '; Path=/; HttpOnly; SameSite=Lax';
+
+        return $copy;
+    }
+
     public function send(): void
     {
         http_response_code($this->status);

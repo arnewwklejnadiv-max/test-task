@@ -1,10 +1,16 @@
 (function () {
     const views = document.querySelector('#views');
-    if (!views || !views.dataset.id) {
+    const token = document.querySelector('meta[name="csrf-token"]');
+    if (!views || !views.dataset.id || !token || token.content === '') {
         return;
     }
 
-    fetch('/articles/' + views.dataset.id + '/views', {method: 'POST'})
+    fetch('/articles/' + views.dataset.id + '/views', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token.content,
+        },
+    })
         .then(function (response) {
             if (!response.ok) {
                 throw new Error('view failed');

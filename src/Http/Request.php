@@ -8,11 +8,15 @@ final class Request
 {
     /** @param array<string, mixed> $query */
     /** @param array<string, string> $params */
+    /** @param array<string, string> $cookies */
+    /** @param array<string, string> $headers */
     public function __construct(
         private string $method,
         private string $path,
         private array $query,
         private array $params = [],
+        private array $cookies = [],
+        private array $headers = [],
     ) {}
 
     public static function fromGlobals(): self
@@ -31,7 +35,44 @@ final class Request
             is_string($method) ? strtoupper($method) : 'GET',
             $path,
             $_GET,
+            [],
+            self::strings($_COOKIE),
+            self::headers($_SERVER),
         );
+    }
+
+    /**
+     * @param array<mixed> $source
+     *
+     * @return array<string, string>
+     */
+    private static function strings(array $source): array
+    {
+        $values = [];
+        foreach ($source as $key => $value) {
+            if (is_string($key) && is_string($value)) {
+                $values[$key] = $value;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param array<mixed> $server
+     *
+     * @return array<string, string>
+     */
+    private static function headers(array $server): array
+    {
+        $headers = [];
+        foreach ($server as $key => $value) {
+            if (is_string($key) && str_starts_with($key, 'HTTP_') && is_string($value)) {
+                $headers[$key] = $value;
+            }
+        }
+
+        return $headers;
     }
 
     public function method(): string
@@ -61,5 +102,15 @@ final class Request
     public function param(string $key): string
     {
         return $this->params[$key] ?? '';
+    }
+
+    public function cookie(string $key): string
+    {
+        return $this->cookies[$key] ?? '';
+    }
+
+    public function header(string $name): string
+    {
+        return $this->headers['HTTP_' . strtoupper(str_replace('-', '_', $name))] ?? '';
     }
 }

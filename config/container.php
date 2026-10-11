@@ -8,6 +8,8 @@ use App\Console\Commands\SeedCommand;
 use App\Domain\Repository\ArticleRepository;
 use App\Domain\Repository\CategoryRepository;
 use App\Domain\Repository\FileRepository;
+use App\Domain\Repository\SessionRepository;
+use App\Domain\Repository\TokenRepository;
 use App\Http\Kernel;
 use App\Http\Handler\MethodNotAllowedExceptionHandler;
 use App\Http\Handler\NotFoundExceptionHandler;
@@ -22,6 +24,8 @@ use App\Infrastructure\Database\PdoConnection;
 use App\Infrastructure\Persistence\PdoArticleRepository;
 use App\Infrastructure\Persistence\PdoCategoryRepository;
 use App\Infrastructure\Persistence\PdoFileRepository;
+use App\Infrastructure\Persistence\PdoSessionRepository;
+use App\Infrastructure\Persistence\PdoTokenRepository;
 use App\Infrastructure\View\SmartyRenderer;
 
 return [
@@ -38,6 +42,8 @@ return [
     ArticleRepository::class => PdoArticleRepository::class,
     CategoryRepository::class => PdoCategoryRepository::class,
     FileRepository::class => PdoFileRepository::class,
+    SessionRepository::class => PdoSessionRepository::class,
+    TokenRepository::class => PdoTokenRepository::class,
     SmartyRenderer::class => static fn (): SmartyRenderer => new SmartyRenderer(
         BASE_PATH . '/resources/views',
         sys_get_temp_dir() . '/smarty',

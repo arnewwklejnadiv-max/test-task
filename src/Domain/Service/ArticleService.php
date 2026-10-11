@@ -92,6 +92,11 @@ final class ArticleService
         ];
     }
 
+    public function views(int $id): ?int
+    {
+        return $this->articles->find($id)?->views;
+    }
+
     public function registerView(int $id): ?int
     {
         if ($this->articles->incrementViews($id) === 0) {

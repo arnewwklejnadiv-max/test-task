@@ -1,5 +1,6 @@
 {extends file="layout.tpl"}
 {block name="title"}{$article->name}{/block}
+{block name="meta"}<meta name="csrf-token" content="{$viewToken}">{/block}
 {block name="content"}
 <main class="article-page">
     <article>
