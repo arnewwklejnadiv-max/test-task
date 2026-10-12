@@ -6,8 +6,11 @@
 
 Нужны Docker и Docker Compose.
 
+Smarty ставится через Composer. Пакет `smarty/smarty` уже записан в `composer.json`, отдельно подключать его не нужно. Каталог `vendor` в репозиторий не входит, его создаёт `composer install`.
+
 ```bash
 cp .env.example .env
+composer install
 docker compose up -d --build
 docker compose exec php-fpm php bin/console database:migrate
 docker compose exec php-fpm php bin/console database:seed
